@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "cliffwheadon-terraform-up-and-running-state"
-    key    = "global/s3/terraform.tfstate"
+    key    = "stage/data-stores/mysql/terraform.tfstate"
     region = "us-east-1"
   }
 }
@@ -11,14 +11,9 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "terraform_state" {
-  bucket = "cliffwheadon-terraform-up-and-running-state"
+module "mysql" {
+  source = "../../../../modules/data-stores/mysql"
 
-  versioning {
-    enabled = true
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
+  db_name = "mysql_stage"
+  db_password = "${var.db_password}"
 }
