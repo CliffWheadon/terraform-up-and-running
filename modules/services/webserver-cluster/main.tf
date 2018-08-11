@@ -4,7 +4,7 @@ data "terraform_remote_state" "db" {
   config {
     bucket = "${var.db_remote_state_bucket}"
     key    = "${var.db_remote_state_key}"
-    region = "us-east-1"
+    region = "${var.aws_region}"
   }
 }
 
@@ -16,6 +16,31 @@ data "template_file" "user_data" {
     db_address  = "${data.terraform_remote_state.db.address}"
     db_port     = "${data.terraform_remote_state.db.port}"
     server_text = "${var.server_text}"
+  }
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "image-type"
+    values = ["machine"]
+  }
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
   }
 }
 
