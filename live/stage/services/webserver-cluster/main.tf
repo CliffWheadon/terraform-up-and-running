@@ -14,7 +14,7 @@ module "webserver_cluster" {
   source = "../../../../modules/services/webserver-cluster"
 
   ami         = "ami-40d28157"
-  server_text = "New server text"
+  server_text = "Hello World!"
 
   cluster_name           = "webservers-stage"
   db_remote_state_bucket = "cliffwheadon-terraform-up-and-running-state"
