@@ -11,8 +11,9 @@ provider "aws" {
   region = "us-east-1"
 }
 
-module "webserver_cluster" {
+module "mysql" {
   source = "../../../modules/data-stores/mysql"
 
-  db_name = "mysql-stage"
+  db_name = "mysql_stage"
+  db_password = "${var.db_password}"
 }
